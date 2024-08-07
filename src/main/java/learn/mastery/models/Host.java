@@ -36,6 +36,32 @@ public class Host {
         this.weekendRate = weekendRate;
     }
 
+    public Host(String id, String lastName, String email, String phone, String address, String city, String state, String postalCode, int standardRate, int weekendRate) {
+        this.id = id;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+        this.city = city;
+        this.state = state;
+        this.postalCode = postalCode;
+        this.standardRate = BigDecimal.valueOf( standardRate );
+        this.weekendRate = BigDecimal.valueOf( weekendRate );
+    }
+
+    public Host(String id, String lastName, String email, String phone, String address, String city, String state, String postalCode, String standardRate, String weekendRate) {
+        this.id = id;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+        this.city = city;
+        this.state = state;
+        this.postalCode = postalCode;
+        this.standardRate = BigDecimal.valueOf(Double.valueOf( standardRate ));
+        this.weekendRate = BigDecimal.valueOf(Double.valueOf( weekendRate ));
+    }
+
     //Getters Setters
 
     public String getId() {

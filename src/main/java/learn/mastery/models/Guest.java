@@ -2,7 +2,7 @@ package learn.mastery.models;
 
 public class Guest {
 
-    private String id;
+    private int id;
     private String firstName;
     private String lastName;
     private String email;
@@ -13,7 +13,7 @@ public class Guest {
     public Guest() {
     }
 
-    public Guest(String id, String firstName, String lastName, String email, String phone, String state) {
+    public Guest(int id, String firstName, String lastName, String email, String phone, String state) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -23,11 +23,11 @@ public class Guest {
     }
 
     //Getter Setters
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

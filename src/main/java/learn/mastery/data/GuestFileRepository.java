@@ -38,9 +38,9 @@ public class GuestFileRepository implements GuestRepository {
     }
 
     @Override
-    public Guest findById(String id) {
+    public Guest findById(int id) {
         return findAll().stream()
-                .filter(i -> i.getId().equalsIgnoreCase(id))
+                .filter(i -> i.getId() == id)
                 .findFirst()
                 .orElse(null);
     }
@@ -56,7 +56,7 @@ public class GuestFileRepository implements GuestRepository {
     //Serialize and Deserialize
     private Guest deserialize(String[] fields) {
         Guest result = new Guest();
-        result.setId(fields[0]);
+        result.setId( Integer.parseInt( fields[0]) );
         result.setFirstName(fields[1]);
         result.setLastName(fields[2]);
         result.setEmail((fields[3]));

@@ -7,14 +7,20 @@ import java.util.List;
 
 public interface ReservationRepository {
 
-    Reservation findAllById(int id, String hostID);
+    void setHost(Host host);
 
-    List<Reservation> findAllByHost(String hostId);
+    Host getHost();
 
-    boolean update(Reservation reservation, String hostID) throws DataException;
+    Reservation findById(int id);
 
-    boolean delete(int reservationId, String hostID) throws DataException;
+    List<Reservation> findAllByGuestId(int id);
 
-    Reservation add(Reservation reservation, Host host) throws DataException;
+    List<Reservation> findAll();
+
+    boolean update(Reservation reservation) throws DataException;
+
+    boolean delete(int reservationId) throws DataException;
+
+    Reservation add(Reservation reservation) throws DataException;
 
 }
