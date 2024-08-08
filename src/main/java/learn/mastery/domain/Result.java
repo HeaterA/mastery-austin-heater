@@ -1,6 +1,6 @@
 package learn.mastery.domain;
 
-public class Results<T> extends Response {
+public class Result<T> extends Response {
 
     private T payload;
 
