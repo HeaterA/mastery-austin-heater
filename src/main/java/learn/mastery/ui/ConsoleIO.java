@@ -113,6 +113,27 @@ public class ConsoleIO {
         }
     }
 
+    //Variant of readLocalDate that allows for a null return
+    public LocalDate readOptionalLocalDate(String prompt) {
+        LocalDate date = null;
+
+        while (true) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+
+            if ("".equalsIgnoreCase(input)) {
+                return null; // Return null when null
+            }
+
+            try {
+                date = LocalDate.parse(input, formatter); // Try parsing string to LocalDate
+                return date; // Return LocalDate if successful
+            } catch (DateTimeParseException e) {
+               println("Invalid date format. Please enter a valid date in MM/DD/YYYY format or hit ENTER to skip.");
+            }
+        }
+    }
+
     public BigDecimal readBigDecimal(String prompt) {
         while (true) {
             String input = readRequiredString(prompt);

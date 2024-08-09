@@ -10,7 +10,7 @@ public class Reservation {
     private LocalDate startDate;
     private LocalDate endDate;
     private BigDecimal costOfStay;
-
+    private Host host; //TODO
 
 
     public int getId() {
@@ -52,4 +52,26 @@ public class Reservation {
     public void setcostOfStay(BigDecimal costOfStay) {
         this.costOfStay = costOfStay;
     }
+
+    public BigDecimal determineCostOfStay(){int days = (int) (endDate.toEpochDay() - startDate.toEpochDay());
+        double totalAmount = 0.0;
+        for (int i = 0; i < days; i++) {
+            LocalDate date = startDate.plusDays(i);
+            if (date.getDayOfWeek().getValue() == 6 ||date.getDayOfWeek().getValue() == 7 ) { // 6 = Saturday, 7 = Sunday
+                totalAmount += host.getWeekendRate().doubleValue();
+            } else {
+                totalAmount += host.getStandardRate().doubleValue();
+            }
+        }
+        return BigDecimal.valueOf(totalAmount);
+    }
+
+    public Host getHost() {
+        return host;
+    }
+
+    public void setHost(Host host) {
+        this.host = host;
+    }
+
 }

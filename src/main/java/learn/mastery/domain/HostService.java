@@ -46,24 +46,7 @@ public class HostService {
                 .orElse(null);
     }
 
-    //add
-    /* TODO double check if add was used in scope of project
-    public Result<Host> add(Host host){
-        Result<Host> result = validateHost(host);
-        //Validate
-        if(!result.isSuccess()){
-            return result;
-        }
-
-        //check if email was already used
-        if( findHostbyEmail(host.getEmail()) != null ){
-            result.addErrorMessage("This email is already registered to a host");
-            return result;
-        }
-
-        //result.setPayload(repository.add(host));
-        return result;
-    }*/
+    //Dont Create
 
     //validate
     public Result<Host> validateHost(Host host) {

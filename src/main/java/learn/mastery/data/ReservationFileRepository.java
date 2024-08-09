@@ -45,7 +45,7 @@ public class ReservationFileRepository implements ReservationRepository{
             return "";
         }
 
-        return Paths.get(directory, host.getId() + ".csv").toString();
+        return Paths.get(directory, "test_"+ host.getId() + ".csv").toString();//TODO remove test from pathstring
     }
 
     @Override
@@ -63,7 +63,6 @@ public class ReservationFileRepository implements ReservationRepository{
                 .collect(Collectors.toList());
         return guestReservations;
     }
-
 
     //@Override
     public List<Reservation> findAll() {
@@ -174,14 +173,13 @@ public class ReservationFileRepository implements ReservationRepository{
 
         List<Reservation> hostReservations = findAll();
 
-        //Make new Id
+        //Make new id
         int nextId = hostReservations.stream()
                 .mapToInt(Reservation::getId)
                 .max()
                 .orElse(0) + 1;
 
         reservation.setId(nextId);
-
         hostReservations.add(reservation);
         writeToFile(hostReservations);
         return reservation;
