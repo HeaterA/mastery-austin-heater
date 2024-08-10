@@ -8,13 +8,13 @@ import learn.mastery.domain.Result;
 import learn.mastery.models.Guest;
 import learn.mastery.models.Host;
 import learn.mastery.models.Reservation;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
-//@Component
+@Component
 public class Controller {
 
     private final View view;
@@ -23,8 +23,9 @@ public class Controller {
     private ReservationService reservationService;
 
 
-
-    //Temp Constructor for General Outline
+    /**
+     * Class constructor.
+     */
     public Controller(HostService hostService, GuestService guestService, ReservationService reservationService, View view) {
         this.hostService = hostService;
         this.guestService = guestService;
@@ -32,9 +33,12 @@ public class Controller {
         this.view = view;
     }
 
-
+    /**
+     * Prints out a welcome message and starts the main loop.
+     * Prints out an exit message once the loop ends
+     */
     public void run() {
-        view.displayHeader("Welcome to [title]");
+        view.displayHeader("Welcome to Don't Wreck My House");
         try {
             runAppLoop();
         } catch (DataException ex) {
@@ -43,25 +47,28 @@ public class Controller {
         view.displayHeader("Goodbye.");
     }
 
+    /**
+     * Prints out the main menu of the program and prompts
+     * the console for input. Based on the enum value selected
+     * the program then prompts for the appropriate method call
+     *
+     * @throws DataException
+     */
     private void runAppLoop() throws DataException {
         MainMenuOption option;
         do {
             option = view.selectMainMenuOption();
             switch (option) {
                 case VIEW_RESERVATIONS:
-                    System.out.println("ADD VIEW RESERVATIONS");
                     viewReservations();
                     break;
                 case MAKE_RESERVATION:
-                    System.out.println("ADD MAKE RESERVATION");
                     addReservation();
                     break;
                 case EDIT_RESERVATION:
-                    System.out.println("ADD EDIT RESERVATION");
                     editReservations();
                     break;
                 case CANCEL_RESERVATION:
-                    System.out.println("ADD CANCEL RESERVATION");
                     deleteReservations();
                     break;
 
@@ -69,38 +76,52 @@ public class Controller {
         } while (option != MainMenuOption.EXIT);
     }
 
-    //View TODO clean
+    //View
+
+    /**
+     * Prints out a list of reservation objects
+     * based on a provided host email
+     */
     private void viewReservations() {
         view.displayHeader("VIEW RESERVATIONS FOR HOST");
         //Get host
         Host host = hostService.findHostByEmail(view.getHostEmail());
-        host = hostService.findHostByEmail("jsuch3x@unblog.fr"); //TODO remove test line
-        host = hostService.findHostByEmail("ryoselevitch78@free.fr"); //TODO remove test line
 
         //Print Reservation List
         //If host is found, print header and results
         view.printHostResults(host);
+        if(host == null){return;}
+
         //Confirm guests & return list
         List<Reservation> reservations = identifyGuestsInReservations(reservationService.findAllReservationsForHost(host));
         //printlist
         view.printReservations(reservations);
     }
 
-    //Add TODO clean
+    //Add
+    /**
+     * Prints out a list of upcoming reservation objects
+     * based on a provided host email and guest email strings.
+     * Prompts a new reservation object for creation. The
+     * reservation is then validated and prompted for confirmation.
+     * once confirmed object is added to the repository and
+     * written to the file repository based on the host
+     *
+     * @throws DataException
+     */
     private void addReservation() throws DataException {
+        view.displayHeader("ADD A RESERVATION");
+
         //Get host
         Host host = hostService.findHostByEmail(view.getHostEmail());
-        host = hostService.findHostByEmail("jsuch3x@unblog.fr"); //TODO remove test line
-        host = hostService.findHostByEmail("ryoselevitch78@free.fr"); //TODO remove test line
-
         //get guest
-        Guest guest = guestService.findGuestByEmail("view.getGuestEmail()");
-        guest = guestService.findGuestByEmail("iganter9@privacy.gov.au"); //TODO remove test line
-        guest = guestService.findGuestByEmail("coluwatoyinf@hubpages.com");//TODO remove test line
+        Guest guest = guestService.findGuestByEmail(view.getGuestEmail());
 
         //Print Reservation List
         //If host is found, print header and results
         view.printHostResults(host);
+        if(host == null){return;}
+
         //Confirm guests & return list
         List<Reservation> reservations = identifyGuestsInReservations(reservationService.findAllReservationsForHost(host));
         reservations = reservationService.filterUpcomingReservations(reservations);
@@ -108,7 +129,9 @@ public class Controller {
         view.printReservations(reservations);
 
         //Return to menu if null host
-        if (host == null) {return;}
+        if (host == null) {
+            return;
+        }
 
         //Create new reservation in view, then pass to service
         Reservation reservation = view.createNewReservation(host, guest);
@@ -133,27 +156,33 @@ public class Controller {
         view.displayStatus(true, successMessage);
     }
 
-    //Edit TODO clean
+    //Edit
+
+    /**
+     * Prints out a list of reservation objects filtered by a
+     * guest, based on a provided host email and guest email strings.
+     * The targeted reservation object is then located in
+     * the file repository after receiving a id input.
+     * If the targeted reservation is found, prompts for new LocalDates
+     * are prompted to be updated and then validated along with the new cost.
+     * The reservation is then updated in the file repository after
+     * receiving confirmation from the console.
+     *
+     * @throws DataException
+     */
     private void editReservations() throws DataException {
-        view.displayHeader("EDIT A RESERVATION");
+        view.displayHeader("UPDATE A RESERVATION");
 
         //Get host
         Host host = hostService.findHostByEmail(view.getHostEmail());
-        host = hostService.findHostByEmail("jsuch3x@unblog.fr"); //TODO remove test line
-        host = hostService.findHostByEmail("ryoselevitch78@free.fr"); //TODO remove test line
-
         //get guest
         Guest guest = guestService.findGuestByEmail(view.getGuestEmail());
-        guest = guestService.findGuestByEmail("iganter9@privacy.gov.au"); //TODO remove test line
-
-        //Return to menu if null host
-        if (host == null) {
-            view.displayStatus(false, "Host not found");
-            return;}
 
         //Print Reservation List
         //If host is found, print header and results
         view.printHostResults(host);
+        if(host == null){return;}
+
         //Confirm guests & return list
         List<Reservation> reservations = identifyGuestsInReservations(reservationService.findAllReservationsForHost(host));
         reservations = reservationService.filterReservationsByGuest(reservations, guest);
@@ -163,11 +192,12 @@ public class Controller {
         //Return to menu if null results
         if (reservations.isEmpty()) {
             view.displayStatus(false, "No reservations found for this guest");
-            return;}
+            return;
+        }
 
         //Request id and return the target reservation
         Reservation targetReservation = reservationService.findReservationById(reservations, view.getReservationID());
-        if (targetReservation == null) { //!result.isSuccess()) {
+        if (targetReservation == null) {
             view.displayStatus(false, "Invalid ID selected");
             return;
         }
@@ -202,27 +232,29 @@ public class Controller {
     }
 
     //Delete TODO
+
+    /**
+     * Prints out a list of upcoming reservation objects filtered
+     * by guest, based on a provided host email and guest email strings.
+     * The targeted reservation object is then removed from
+     * the file repository after receiving a id input and
+     * confirmation from the console
+     *
+     * @throws DataException
+     */
     private void deleteReservations() throws DataException {
         view.displayHeader("DELETE A RESERVATION");
 
         //Get host
         Host host = hostService.findHostByEmail(view.getHostEmail());
-        host = hostService.findHostByEmail("jsuch3x@unblog.fr"); //TODO remove test line
-        host = hostService.findHostByEmail("ryoselevitch78@free.fr"); //TODO remove test line
-
         //get guest
         Guest guest = guestService.findGuestByEmail(view.getGuestEmail());
-        guest = guestService.findGuestByEmail("iganter9@privacy.gov.au"); //TODO remove test line
-        guest = guestService.findGuestByEmail("coluwatoyinf@hubpages.com");//TODO remove test line
-
-        //Return to menu if null host
-        if (host == null) {
-            view.displayStatus(false, "Host not found");
-            return;}
 
         //Print Reservation List
         //If host is found, print header and results
         view.printHostResults(host);
+        if(host == null){return;}
+
         //Confirm guests & return list
         List<Reservation> reservations = identifyGuestsInReservations(reservationService.findAllReservationsForHost(host));
         reservations = reservationService.filterReservationsByGuest(reservations, guest);
@@ -233,18 +265,16 @@ public class Controller {
         //Return to menu if null results
         if (reservations.isEmpty()) {
             view.displayStatus(false, "No reservations found for this guest");
-            return;}
+            return;
+        }
 
         //Request id and return the target reservation
         Reservation targetReservation = reservationService.findReservationById(reservations, view.getReservationID());
-        if (targetReservation == null) { //!result.isSuccess()) {
+        if (targetReservation == null) {
             view.displayStatus(false, "Invalid ID selected");
             return;
         }
-        System.out.println("got: " + targetReservation.getId());
 
-        //get reservation
-        //confirm and update
         //Add update the reservation in repository
         Result<Reservation> result = reservationService.deleteReservation(targetReservation);
         if (!result.isSuccess()) {
@@ -259,13 +289,22 @@ public class Controller {
 
 
     //Support Methods
-
     //Identify any guests found in reservationList
+
+    /**
+     * Returns a list of reservation objects that
+     * populates each reservation's guest with
+     * the guest that matches the stored id
+     *
+     * @param reservations a list of reservation objects with guest ids
+     * @return a list of reservation objects with populated guests
+     */
     private List<Reservation> identifyGuestsInReservations(List<Reservation> reservations) {
         List<Reservation> result = reservations.stream()
-                .map(r -> { // Update the Guests in list of Reservations
-                    Guest gFromService = guestService.findGuestByGuestID(r.getGuest().getId());
-                    r.setGuest(gFromService);
+                .map(r -> {
+                    // Update the Guests in list of Reservations
+                    Guest guests = guestService.findGuestByGuestID(r.getGuest().getId());
+                    r.setGuest(guests);
                     return r;
                 })
                 .collect(Collectors.toList());

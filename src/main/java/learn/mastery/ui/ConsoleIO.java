@@ -129,7 +129,7 @@ public class ConsoleIO {
                 date = LocalDate.parse(input, formatter); // Try parsing string to LocalDate
                 return date; // Return LocalDate if successful
             } catch (DateTimeParseException e) {
-               println("Invalid date format. Please enter a valid date in MM/DD/YYYY format or hit ENTER to skip.");
+                println("Invalid date format. Please enter a valid date in MM/DD/YYYY format or hit ENTER to skip.");
             }
         }
     }

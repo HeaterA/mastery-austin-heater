@@ -3,18 +3,30 @@ package learn.mastery.domain;
 
 import learn.mastery.data.HostRepository;
 import learn.mastery.models.Host;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class HostService {
 
     private final HostRepository repository;
 
+    /**
+     * Class constructor.
+     */
     public HostService(HostRepository repository) {
         this.repository = repository;
     }
 
     //Helper
     //Checks if a String is shorthand for a state
+    /**
+     * Returns a boolean based on whether a
+     * provided string is found in the stored list of
+     * state abbreviations
+     *
+     * @param state     string value of a state abbreviation
+     * @return          if the state string matches the stored values
+     */
     private boolean checkValidStateShorthand(String state) {
         final String[] validStateShorthand = {"AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
                 "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
@@ -30,7 +42,15 @@ public class HostService {
         return false;
     }
 
-    //pass find id
+    //Find by id
+    /**
+     * Returns a specific host from the repository
+     * based on a provided matching string. Always returns null
+     * if there is no match
+     *
+     * @param hostID the hostID string of the targeted host object
+     * @return null or the targeted host with matching hostID string
+     */
     public Host findHostByHostId(String hostID){
         return repository.findAll().stream()
                 .filter(i -> i.getId().equals(hostID) )
@@ -38,7 +58,15 @@ public class HostService {
                 .orElse(null);
     }
 
-    //pass find email
+    //Find by email
+    /**
+     * Returns a specific host from the repository
+     * based on a provided matching string. Always returns null
+     * if there is no match
+     *
+     * @param email     the email string of the targeted host object
+     * @return          null or the targeted host with matching email string
+     */
     public Host findHostByEmail(String email){
         return repository.findAll().stream()
                 .filter(i -> i.getEmail().toLowerCase().trim().equalsIgnoreCase(email) )
@@ -49,6 +77,13 @@ public class HostService {
     //Dont Create
 
     //validate
+    /**
+     * Validates if a host object's fields all pass
+     * the desired checks
+     *
+     * @param host  the host object to check
+     * @return      a list of potential error messages
+     */
     public Result<Host> validateHost(Host host) {
 
         Result<Host> result = new Result<>();
@@ -185,13 +220,12 @@ public class HostService {
             result.addErrorMessage("Weekend rate must be higher than 0");
         }//Weekend
 
+
+        //Check for error messages and return
         if(!result.isSuccess()){
             result.addErrorMessage("Error: Invalid Host. See issues above.");
         }
-
         return result;
     }
-
-
 
 }

@@ -2,12 +2,16 @@ package learn.mastery.domain;
 
 import learn.mastery.data.GuestRepository;
 import learn.mastery.models.Guest;
-import learn.mastery.models.Guest;
+import org.springframework.stereotype.Service;
 
+@Service
 public class GuestService {
 
     private final GuestRepository repository;
 
+    /**
+     * Class constructor.
+     */
     public GuestService(GuestRepository repository) {
         this.repository = repository;
     }
@@ -16,6 +20,14 @@ public class GuestService {
 
     //Helper
     //Checks if a String is shorthand for a state
+    /**
+     * Returns a boolean based on whether a
+     * provided string is found in the stored list of
+     * state abbreviations
+     *
+     * @param state     string value of a state abbreviation
+     * @return          if the state string matches the stored values
+     */
     private boolean checkValidStateShorthand(String state) {
         final String[] validStateShorthand = {"AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
                 "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
@@ -32,6 +44,14 @@ public class GuestService {
     }
     
     //pass find id
+    /**
+     * Returns a specific guest from the repository
+     * based on a provided matching integer. Always returns null
+     * if there is no match
+     *
+     * @param guestID the guestID string of the targeted guest object
+     * @return null or the targeted guest with matching guestID string
+     */
     public Guest findGuestByGuestID(int guestID){
         return repository.findAll().stream()
                 .filter(i -> i.getId() == guestID )
@@ -40,6 +60,14 @@ public class GuestService {
     }
 
     //pass find email
+    /**
+     * Returns a specific guest from the repository
+     * based on a provided matching string. Always returns null
+     * if there is no match
+     *
+     * @param guestEmail    the email string of the targeted guest object
+     * @return              null or the targeted guest with matching email string
+     */
     public Guest findGuestByEmail(String guestEmail){
         return repository.findAll().stream()
                 .filter(i -> i.getEmail().toLowerCase().trim().equalsIgnoreCase(guestEmail) )
@@ -47,61 +75,67 @@ public class GuestService {
                 .orElse(null);
     }
 
-
-    public Result<Guest> validateGuest(Guest Guest) {
+    //Validate
+    /**
+     * Validates if a guest object's fields all pass
+     * the desired checks
+     *
+     * @param guest  the host object to check
+     * @return      a list of potential error messages
+     */
+    public Result<Guest> validateGuest(Guest guest) {
 
         Result<Guest> result = new Result<>();
         //Catch Null
-        if (Guest == null) {
+        if (guest == null) {
             result.addErrorMessage("Guest cannot be null");
             return result;
         }
 
-
         //First name
-        if (Guest.getFirstName().isEmpty() || Guest.getFirstName() == null) {
+        if (guest.getFirstName().isEmpty() || guest.getFirstName() == null) {
             result.addErrorMessage("Guest last name is required");
         } else {
             //Check Name Length
-            if (Guest.getFirstName().length() < 2) {
+            if (guest.getFirstName().length() < 2) {
                 result.addErrorMessage("Names must be at least 2 letters long.");
             }
-            if (Guest.getFirstName().contains(",")) {
+            if (guest.getFirstName().contains(",")) {
                 result.addErrorMessage("Illegal character detected in name.");
             }
         }
         //Last Name
-        if (Guest.getLastName().isEmpty() || Guest.getLastName() == null) {
+        if (guest.getLastName().isEmpty() || guest.getLastName() == null) {
             result.addErrorMessage("Guest last name is required");
         } else {
             //Check Name Length
-            if (Guest.getLastName().length() < 2) {
+            if (guest.getLastName().length() < 2) {
                 result.addErrorMessage("Names must be at least 2 letters long.");
             }
-            if (Guest.getLastName().contains(",")) {
+            if (guest.getLastName().contains(",")) {
                 result.addErrorMessage("Illegal character detected in name.");
             }
         }//Name End
 
 
         //email
-        if (Guest.getEmail().isEmpty() || Guest.getEmail() == null) {
+        if (guest.getEmail().isEmpty() || guest.getEmail() == null) {
             result.addErrorMessage("Email is required");
         } else {
             //Check For Errors
-            if (Guest.getEmail().length() < 8) {
+            if (guest.getEmail().length() < 8) {
                 result.addErrorMessage("Email length is too short to be a valid email.");
             }
-            if (Guest.getEmail().contains(",")) {
+            if (guest.getEmail().contains(",")) {
                 result.addErrorMessage("Illegal character detected in name.");
             }
 
-            if (!Guest.getEmail().contains("@") || !Guest.getEmail().contains(".")) {
+            if (!guest.getEmail().contains("@") || !guest.getEmail().contains(".")) {
                 result.addErrorMessage("Invalid email address. (Check placement of \'@\' or \'.\'.");
             } else {
                 String[] s = new String[2];
-                s[0] = Guest.getEmail().substring(0, Guest.getEmail().indexOf("@"));
-                s[1] = Guest.getEmail().substring(Guest.getEmail().indexOf("@") + 1, Guest.getEmail().length());
+                s[0] = guest.getEmail().substring(0, guest.getEmail().indexOf("@"));
+                s[1] = guest.getEmail().substring(guest.getEmail().indexOf("@") + 1, guest.getEmail().length());
 
                 if (s[1].contains("@") || !s[1].contains(".")) {
                     result.addErrorMessage("Invalid email address. (Check placement of \'@\' or \'.\'.");
@@ -111,16 +145,16 @@ public class GuestService {
 
 
         //phone
-        if (Guest.getPhone().isEmpty() || Guest.getPhone() == null) {
+        if (guest.getPhone().isEmpty() || guest.getPhone() == null) {
             result.addErrorMessage("Guest phone number is required");
-        } else if (Guest.getPhone().length() != 13) {
+        } else if (guest.getPhone().length() != 13) {
             result.addErrorMessage("Guest phone number has invalid length");
-        } else if (Guest.getPhone().charAt(0) != '(' ||
-                Guest.getPhone().charAt(4) != ')' ||
-                Guest.getPhone().charAt(5) != ' ') {
+        } else if (guest.getPhone().charAt(0) != '(' ||
+                guest.getPhone().charAt(4) != ')' ||
+                guest.getPhone().charAt(5) != ' ') {
             result.addErrorMessage("Invalid phone number format");
         } else {
-            String purePhoneNumber = Guest.getPhone().substring(1, 4) + Guest.getPhone().substring(6, 13);
+            String purePhoneNumber = guest.getPhone().substring(1, 4) + guest.getPhone().substring(6, 13);
             boolean purePhone = true;
             for (char c : purePhoneNumber.toCharArray()) {
                 if (!Character.isDigit(c)) {
@@ -134,9 +168,9 @@ public class GuestService {
         }//End Phone
 
         //state
-        if (Guest.getState().isEmpty() || Guest.getState() == null) {
+        if (guest.getState().isEmpty() || guest.getState() == null) {
             result.addErrorMessage("State abbreviation is required");
-        } else if (!checkValidStateShorthand(Guest.getState()) || Guest.getState().length() != 2) {
+        } else if (!checkValidStateShorthand(guest.getState()) || guest.getState().length() != 2) {
             result.addErrorMessage("Invalid state abbreviation");
         }//End City
 
