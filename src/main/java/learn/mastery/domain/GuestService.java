@@ -16,7 +16,6 @@ public class GuestService {
         this.repository = repository;
     }
 
-    //Dont Create
 
     //Helper
     //Checks if a String is shorthand for a state
@@ -34,9 +33,8 @@ public class GuestService {
                 "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH",
                 "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI",
                 "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"};
-
-        for (int i = 0; i < validStateShorthand.length; i++) {
-            if (state.equalsIgnoreCase(validStateShorthand[i])) {
+        for(String vss : validStateShorthand){
+            if (state.equalsIgnoreCase(vss)) {
                 return true;
             }
         }
@@ -93,7 +91,7 @@ public class GuestService {
         }
 
         //First name
-        if (guest.getFirstName().isEmpty() || guest.getFirstName() == null) {
+        if (guest.getFirstName() == null) {
             result.addErrorMessage("Guest last name is required");
         } else {
             //Check Name Length
@@ -105,7 +103,7 @@ public class GuestService {
             }
         }
         //Last Name
-        if (guest.getLastName().isEmpty() || guest.getLastName() == null) {
+        if (guest.getLastName() == null) {
             result.addErrorMessage("Guest last name is required");
         } else {
             //Check Name Length
@@ -119,7 +117,7 @@ public class GuestService {
 
 
         //email
-        if (guest.getEmail().isEmpty() || guest.getEmail() == null) {
+        if (guest.getEmail() == null) {
             result.addErrorMessage("Email is required");
         } else {
             //Check For Errors
@@ -131,21 +129,21 @@ public class GuestService {
             }
 
             if (!guest.getEmail().contains("@") || !guest.getEmail().contains(".")) {
-                result.addErrorMessage("Invalid email address. (Check placement of \'@\' or \'.\'.");
+                result.addErrorMessage("Invalid email address. (Check placement of '@' or '.'.");
             } else {
                 String[] s = new String[2];
                 s[0] = guest.getEmail().substring(0, guest.getEmail().indexOf("@"));
-                s[1] = guest.getEmail().substring(guest.getEmail().indexOf("@") + 1, guest.getEmail().length());
+                s[1] = guest.getEmail().substring(guest.getEmail().indexOf("@") + 1);
 
                 if (s[1].contains("@") || !s[1].contains(".")) {
-                    result.addErrorMessage("Invalid email address. (Check placement of \'@\' or \'.\'.");
+                    result.addErrorMessage("Invalid email address. (Check placement of '@' or '.'.");
                 }
             }
         }//End Email
 
 
         //phone
-        if (guest.getPhone().isEmpty() || guest.getPhone() == null) {
+        if (guest.getPhone() == null) {
             result.addErrorMessage("Guest phone number is required");
         } else if (guest.getPhone().length() != 13) {
             result.addErrorMessage("Guest phone number has invalid length");
@@ -168,7 +166,7 @@ public class GuestService {
         }//End Phone
 
         //state
-        if (guest.getState().isEmpty() || guest.getState() == null) {
+        if (guest.getState() == null) {
             result.addErrorMessage("State abbreviation is required");
         } else if (!checkValidStateShorthand(guest.getState()) || guest.getState().length() != 2) {
             result.addErrorMessage("Invalid state abbreviation");

@@ -23,7 +23,7 @@ public class View {
 
 
     /**
-     * Returns the enum value of MainMenuOption based on a
+     * Returns the enum value of MainMenuOption based on an
      * integer provided by console input. the integer is restricted
      * to a min of 0 and a max of the enum size
      *
@@ -61,7 +61,7 @@ public class View {
     }
 
     /**
-     * Prints out an eror header into the console above a
+     * Prints out an error header into the console above a
      * secondary line of the same length composed of the
      * character '='. An error message is printed out
      * below the head
@@ -99,16 +99,6 @@ public class View {
     }
 
     /**
-     * Returns a LocalDate based on the string
-     * provided by console input.
-     *
-     * @return LocalDate returns a valid LocalDate
-     */
-    public LocalDate getDate() {
-        return io.readLocalDate("Select a date [MM/dd/yyyy]: ");
-    }
-
-    /**
      * Prints out a list of reservation objects in a
      * predetermined string format
      *
@@ -138,7 +128,7 @@ public class View {
 
     /**
      * Returns a string provided by console input.
-     * The string is assumed to be a email address
+     * The string is assumed to be an email address
      * found within a host object
      *
      * @return the provided string
@@ -149,7 +139,7 @@ public class View {
 
     /**
      * Returns a string provided by console input.
-     * The string is assumed to be a email address
+     * The string is assumed to be an email address
      * found within a guest object
      *
      * @return the provided string
@@ -205,7 +195,7 @@ public class View {
      * Prints out the start date, the end date, and the cost stored in
      * the provided reservation object. User is then prompted to provide
      * a string input from console via a loop until a valid input is provided.
-     * method will then return a empty or populated result object
+     * method will then return an empty or populated result object
      *
      * @param reservation a reservation object to be displayed
      * @return the embedded error messages
@@ -214,7 +204,7 @@ public class View {
     public Result<Reservation> confirmReservation(Reservation reservation) {
         boolean endLoop = false;
         Result<Reservation> result = new Result<>();
-        String choice = "";
+        String choice;
 
         displayHeader("SUMMARY");
         //String Format
@@ -288,6 +278,5 @@ public class View {
 
         return newReservation;
     }
-
 
 }

@@ -98,10 +98,9 @@ public class ReservationFileRepository implements ReservationRepository{
      */
     @Override
     public List<Reservation> findAllByGuestId(int guestId) {
-        List<Reservation> guestReservations = findAll().stream()
+        return findAll().stream()
                 .filter(i -> i.getGuest().getId() == guestId)
                 .collect(Collectors.toList());
-        return guestReservations;
     }
 
     /**
@@ -184,7 +183,7 @@ public class ReservationFileRepository implements ReservationRepository{
         guest.setId(Integer.parseInt (fields[3]));
         result.setGuest(guest);
         //Cost
-        result.setcostOfStay( BigDecimal.valueOf(Double.valueOf(fields[4])) );
+        result.setcostOfStay( BigDecimal.valueOf(Double.parseDouble(fields[4])) );
 
         return result;
     }
@@ -224,7 +223,7 @@ public class ReservationFileRepository implements ReservationRepository{
      */
     @Override
     public boolean delete(int reservationId) throws DataException {
-        if(String.valueOf(reservationId).isEmpty()){
+        if(String.valueOf(reservationId) == null){
             return false;
         }
 

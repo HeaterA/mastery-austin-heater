@@ -75,7 +75,7 @@ public class ReservationService {
     /**
      * Returns a list of reservation objects that contain
      * startDates whose values after the localDate of today
-     * Provides a empty list if none are found
+     * Provides an empty list if none are found
      *
      * @param reservations  a list of reservation objects
      * @return              a list of filtered reservation objects
@@ -94,7 +94,7 @@ public class ReservationService {
     //Filters a list of reservations that were made by a specific guest
     /**
      * Returns a list of reservation objects that contain
-     * the provided guest. Provides a empty list if none
+     * the provided guest. Provides an empty list if none
      * are found
      *
      * @param reservations  a list of reservation objects
@@ -114,7 +114,6 @@ public class ReservationService {
 
 
     //Add
-
     /**
      * Adds a reservation to the repository and passes it to the data layer
      * to be written to file.
@@ -174,7 +173,7 @@ public class ReservationService {
         //Validate again to be safe
         Result<Reservation> result = new Result<>();
         if (reservation == null) {
-            result.addErrorMessage(String.format("Reservation %s does not exist", reservation.getId()));
+            result.addErrorMessage("Reservation does not exist");
             return result;
         }
 
@@ -206,8 +205,8 @@ public class ReservationService {
      * dates overlap with any preexisting reservation. This method
      * is used by the main validate method
      *
-     * @param newReservation
-     * @return
+     * @param newReservation    the reservation object to check
+     * @return                  a list of potential error messages
      */
     private Result<Reservation> conflictingDateRange(Reservation newReservation) {
         Result<Reservation> result = new Result<>();
@@ -215,7 +214,7 @@ public class ReservationService {
 
         //Check if there is any overlap between the new reservation and repository selected
         for (Reservation confirmedReservation : reservationRepository.findAll()) {
-            Boolean overlap = areDatesOverlapping(newReservation, confirmedReservation);
+            boolean overlap = areDatesOverlapping(newReservation, confirmedReservation);
             if (overlap && (confirmedReservation.getId() != newReservation.getId())) {
                 result.addErrorMessage("Dates cannot Overlap");
                 return result;

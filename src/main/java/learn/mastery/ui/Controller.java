@@ -18,9 +18,9 @@ import java.util.stream.Collectors;
 public class Controller {
 
     private final View view;
-    private HostService hostService;
-    private GuestService guestService;
-    private ReservationService reservationService;
+    private final HostService hostService;
+    private final GuestService guestService;
+    private final ReservationService reservationService;
 
 
     /**
@@ -76,8 +76,8 @@ public class Controller {
         } while (option != MainMenuOption.EXIT);
     }
 
-    //View
 
+    //View
     /**
      * Prints out a list of reservation objects
      * based on a provided host email
@@ -94,9 +94,10 @@ public class Controller {
 
         //Confirm guests & return list
         List<Reservation> reservations = identifyGuestsInReservations(reservationService.findAllReservationsForHost(host));
-        //printlist
+        //print List
         view.printReservations(reservations);
     }
+
 
     //Add
     /**
@@ -128,8 +129,8 @@ public class Controller {
         //Print the filtered list
         view.printReservations(reservations);
 
-        //Return to menu if null host
-        if (host == null) {
+        //Return to menu if null guest
+        if (guest == null) {
             return;
         }
 
@@ -156,13 +157,13 @@ public class Controller {
         view.displayStatus(true, successMessage);
     }
 
-    //Edit
 
+    //Edit
     /**
      * Prints out a list of reservation objects filtered by a
      * guest, based on a provided host email and guest email strings.
      * The targeted reservation object is then located in
-     * the file repository after receiving a id input.
+     * the file repository after receiving an id input.
      * If the targeted reservation is found, prompts for new LocalDates
      * are prompted to be updated and then validated along with the new cost.
      * The reservation is then updated in the file repository after
@@ -231,13 +232,13 @@ public class Controller {
         view.displayStatus(true, successMessage);
     }
 
-    //Delete TODO
 
+    //Delete
     /**
      * Prints out a list of upcoming reservation objects filtered
      * by guest, based on a provided host email and guest email strings.
      * The targeted reservation object is then removed from
-     * the file repository after receiving a id input and
+     * the file repository after receiving an id input and
      * confirmation from the console
      *
      * @throws DataException
@@ -290,7 +291,6 @@ public class Controller {
 
     //Support Methods
     //Identify any guests found in reservationList
-
     /**
      * Returns a list of reservation objects that
      * populates each reservation's guest with

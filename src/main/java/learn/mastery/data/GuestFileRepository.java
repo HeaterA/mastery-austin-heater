@@ -12,7 +12,7 @@ import java.util.List;
 public class GuestFileRepository implements GuestRepository {
 
     private final String filePath;
-    private static final String HEADER = "guest_id,first_name,last_name,email,phone,state";
+    //private static final String HEADER = "guest_id,first_name,last_name,email,phone,state";
 
     /**
      * Class constructor.

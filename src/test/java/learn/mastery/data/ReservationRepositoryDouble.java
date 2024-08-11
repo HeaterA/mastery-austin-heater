@@ -1,8 +1,10 @@
 package learn.mastery.data;
 
+import learn.mastery.models.Guest;
 import learn.mastery.models.Host;
 import learn.mastery.models.Reservation;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,6 +13,17 @@ public class ReservationRepositoryDouble implements ReservationRepository {
 
     private List<Reservation> reservations = new ArrayList<>();
     private Host host;
+
+    public ReservationRepositoryDouble(){
+        Reservation reservation = new Reservation();
+        reservation.setId(1);
+        reservation.setStartDate(LocalDate.of(2024, 8, 10));
+        reservation.setEndDate(LocalDate.of(2024, 8, 15));
+        reservation.setGuest(new Guest(1, "Joe", "Job", "JJ@email.com", "(700) 1234567", "nc"));
+        reservation.setHost(new Host("3edda6bc-ab95-49a8-8962-d50b53f84b15","Yearnes","eyearnes0@sfgate.com","(806) 1783815","3 Nova Trail","Amarillo","TX","79182","340","425") );
+        reservation.setcostOfStay(reservation.determineCostOfStay());
+        reservations.add(reservation);
+    }
 
     @Override
     public void setHost(Host host) {
@@ -42,7 +55,6 @@ public class ReservationRepositoryDouble implements ReservationRepository {
 
     @Override
     public List<Reservation> findAll() {
-        System.out.println("yeet");
         return reservations.stream().collect(Collectors.toList());
     }
 
@@ -55,6 +67,7 @@ public class ReservationRepositoryDouble implements ReservationRepository {
             toUpdate.setStartDate(reservation.getStartDate());
             toUpdate.setEndDate(reservation.getEndDate());
             toUpdate.setcostOfStay(reservation.getcostOfStay());
+            return true;
         }
 
         return false;
@@ -62,10 +75,11 @@ public class ReservationRepositoryDouble implements ReservationRepository {
 
     @Override
     public boolean delete(int reservationId) {
-        if (findAllByGuestId(reservationId).size() > 0) {
+        if (findById(reservationId) != null){
             reservations = reservations.stream()
                     .filter(i -> i.getId() != reservationId)
                     .collect(Collectors.toList());
+            return true;
         }
         return false;
     }

@@ -34,8 +34,8 @@ public class HostService {
                 "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI",
                 "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"};
 
-        for (int i = 0; i < validStateShorthand.length; i++) {
-            if (state.equalsIgnoreCase(validStateShorthand[i])) {
+        for(String vss : validStateShorthand){
+            if (state.equalsIgnoreCase(vss)) {
                 return true;
             }
         }
@@ -74,7 +74,6 @@ public class HostService {
                 .orElse(null);
     }
 
-    //Dont Create
 
     //validate
     /**
@@ -95,7 +94,7 @@ public class HostService {
         }
 
         //Last Name
-        if (host.getLastName().isEmpty() || host.getLastName() == null) {
+        if (host.getLastName() == null) {
             result.addErrorMessage("Host last name is required");
         } else {
             //Check Name Length
@@ -109,7 +108,7 @@ public class HostService {
 
 
         //email
-        if (host.getEmail().isEmpty() || host.getEmail() == null) {
+        if (host.getEmail() == null) {
             result.addErrorMessage("Email is required");
         } else {
             //Check For Errors
@@ -121,14 +120,14 @@ public class HostService {
             }
 
             if (!host.getEmail().contains("@") || !host.getEmail().contains(".")) {
-                result.addErrorMessage("Invalid email address. (Check placement of \'@\' or \'.\'.");
+                result.addErrorMessage("Invalid email address. (Check placement of '@' or '.'.");
             } else {
                 String[] s = new String[2];
                 s[0] = host.getEmail().substring(0, host.getEmail().indexOf("@"));
-                s[1] = host.getEmail().substring(host.getEmail().indexOf("@") + 1, host.getEmail().length());
+                s[1] = host.getEmail().substring(host.getEmail().indexOf("@") + 1);
 
                 if (s[1].contains("@") || !s[1].contains(".")) {
-                    result.addErrorMessage("Invalid email address. (Check placement of \'@\' or \'.\'.");
+                    result.addErrorMessage("Invalid email address. (Check placement of '@' or '.'.");
                 }
             }
         }//End Email
@@ -136,7 +135,7 @@ public class HostService {
 
         //phone
         //(208) 6604815
-        if (host.getPhone().isEmpty() || host.getPhone() == null) {
+        if (host.getPhone() == null) {
             result.addErrorMessage("Host phone number is required");
         } else if (host.getPhone().length() != 13) {
             result.addErrorMessage("Host phone number has invalid length");
@@ -159,7 +158,7 @@ public class HostService {
         }//End Phone
 
         //address
-        if (host.getAddress().isEmpty() || host.getAddress() == null) {
+        if (host.getAddress() == null) {
             result.addErrorMessage("Address is required");
         } else {
             if (host.getAddress().length() < 8) {
@@ -169,7 +168,7 @@ public class HostService {
 
         //city
         //address
-        if (host.getAddress().isEmpty() || host.getAddress() == null) {
+        if (host.getAddress() == null) {
             result.addErrorMessage("City is required");
         } else {
             if (host.getAddress().length() < 2) {
@@ -179,7 +178,7 @@ public class HostService {
 
 
         //state
-        if (host.getState().isEmpty() || host.getState() == null) {
+        if (host.getState() == null) {
             result.addErrorMessage("State abbreviation is required");
         } else if (!checkValidStateShorthand(host.getState()) || host.getState().length() != 2) {
             result.addErrorMessage("Invalid state abbreviation");
@@ -187,7 +186,7 @@ public class HostService {
 
 
         //postalCode
-        if (host.getPostalCode() == null || host.getPostalCode().isEmpty()) {
+        if (host.getPostalCode() == null) {
             result.addErrorMessage("Postal code is required.");
         } else {
             if (host.getPostalCode().length() != 5) {

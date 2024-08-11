@@ -10,9 +10,9 @@ public class GuestRepositoryDouble implements GuestRepository {
     public List<Guest> findAll() {
         List<Guest> all = new ArrayList<>();
 
-        all.add(new Guest(1, "Joe", "Job", "JJ@email.com", "7001234567", "nc"));
-        all.add(new Guest(2, "Billy", "Bob", "BobbingAround@email.com", "6001234567", "sc"));
-        all.add(new Guest(3, "Moe", "Robbins", "RobbMoe3@email.com", "5041234567", "nc"));
+        all.add(new Guest(1, "Joe", "Job", "JJ@email.com", "(700) 1234567", "nc"));
+        all.add(new Guest(2, "Billy", "Bob", "BobbingAround@email.com", "(600) 1234567", "sc"));
+        all.add(new Guest(3, "Moe", "Robbins", "RobbMoe3@email.com", "(504) 1234567", "nc"));
 
         return all;
     }

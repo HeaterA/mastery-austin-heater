@@ -1,6 +1,5 @@
 package learn.mastery.data;
 
-import learn.mastery.models.Guest;
 import learn.mastery.models.Host;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -16,7 +15,7 @@ import java.util.List;
 public class HostFileRepository implements HostRepository{
 
     private final String filePath;
-    private static final String HEADER = "id,last_name,email,phone,address,city,state,postal_code,standard_rate,weekend_rate";
+    //private static final String HEADER = "id,last_name,email,phone,address,city,state,postal_code,standard_rate,weekend_rate";
 
     /**
      * Class constructor.
@@ -100,8 +99,8 @@ public class HostFileRepository implements HostRepository{
         result.setCity(fields[5]);
         result.setState(fields[6]);
         result.setPostalCode(fields[7]);
-        result.setStandardRate( BigDecimal.valueOf(Double.valueOf( fields[8])) );
-        result.setWeekendRate( BigDecimal.valueOf(Double.valueOf( fields[9])) );
+        result.setStandardRate( BigDecimal.valueOf(Double.parseDouble( fields[8])) );
+        result.setWeekendRate( BigDecimal.valueOf(Double.parseDouble( fields[9])) );
 
         return result;
     }
